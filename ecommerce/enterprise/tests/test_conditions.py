@@ -17,6 +17,7 @@ from ecommerce.extensions.basket.utils import basket_add_enterprise_catalog_attr
 from ecommerce.extensions.catalogue.tests.mixins import DiscoveryTestMixin
 from ecommerce.extensions.offer.constants import (
     OFFER_ASSIGNMENT_EMAIL_PENDING,
+    OFFER_ASSIGNMENT_EXPIRED,
     OFFER_ASSIGNMENT_REVOKED,
     OFFER_REDEEMED
 )
@@ -332,7 +333,7 @@ class AssignableEnterpriseCustomerConditionTests(EnterpriseServiceMockMixin, Cou
                 assignment = OfferAssignment.objects.filter(
                     offer=voucher.enterprise_offer, code=code, user_email=email
                 ).exclude(
-                    status__in=[OFFER_REDEEMED, OFFER_ASSIGNMENT_REVOKED]
+                    status__in=[OFFER_REDEEMED, OFFER_ASSIGNMENT_EXPIRED, OFFER_ASSIGNMENT_REVOKED]
                 ).first()
                 if assignment:
                     assignment.status = OFFER_REDEEMED
@@ -343,6 +344,7 @@ class AssignableEnterpriseCustomerConditionTests(EnterpriseServiceMockMixin, Cou
         (0, 'test1@example.com', OFFER_ASSIGNMENT_EMAIL_PENDING, True),
         (1, 'test1@example.com', OFFER_REDEEMED, False),
         (0, 'test1@example.com', OFFER_ASSIGNMENT_REVOKED, True),
+        (0, 'test1@example.com', OFFER_ASSIGNMENT_EXPIRED, False),
     )
     @ddt.unpack
     def test_is_satisfied(self, num_orders, email, offer_status, condition_result):

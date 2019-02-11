@@ -9,7 +9,10 @@ from waffle.models import Switch
 
 from ecommerce.courses.tests.factories import CourseFactory
 from ecommerce.enterprise.constants import ENTERPRISE_OFFERS_FOR_COUPONS_SWITCH
-from ecommerce.extensions.offer.constants import OFFER_ASSIGNED, OFFER_ASSIGNMENT_REVOKED, OFFER_REDEEMED
+from ecommerce.extensions.offer.constants import (OFFER_ASSIGNED,
+                                                  OFFER_ASSIGNMENT_EXPIRED,
+                                                  OFFER_ASSIGNMENT_REVOKED,
+                                                  OFFER_REDEEMED)
 from ecommerce.extensions.test import factories
 from ecommerce.tests.factories import PartnerFactory
 from ecommerce.tests.testcases import TestCase
@@ -155,6 +158,8 @@ class VoucherTests(TestCase):
         (Voucher.SINGLE_USE, 0, None, [{'status': OFFER_ASSIGNMENT_REVOKED}], 1),
         (Voucher.MULTI_USE_PER_CUSTOMER, 0, 10, [{'status': OFFER_ASSIGNMENT_REVOKED}], 10),
         (Voucher.MULTI_USE_PER_CUSTOMER, 1, 10, [{'status': OFFER_ASSIGNMENT_REVOKED}], 0),
+        (Voucher.MULTI_USE_PER_CUSTOMER, 0, 10, [{'status': OFFER_ASSIGNMENT_EXPIRED}], 0),
+        (Voucher.MULTI_USE_PER_CUSTOMER, 1, 10, [{'status': OFFER_ASSIGNMENT_EXPIRED}], 0),
     )
     @ddt.unpack
     def test_slots_available_for_assignment(self, usage, num_orders, max_uses, offer_assignments, expected):

@@ -17,7 +17,9 @@ from ecommerce.extensions.basket.constants import EMAIL_OPT_IN_ATTRIBUTE
 from ecommerce.extensions.basket.utils import ORGANIZATION_ATTRIBUTE_TYPE
 from ecommerce.extensions.checkout.exceptions import BasketNotFreeError
 from ecommerce.extensions.customer.utils import Dispatcher
-from ecommerce.extensions.offer.constants import OFFER_ASSIGNMENT_REVOKED, OFFER_REDEEMED
+from ecommerce.extensions.offer.constants import (OFFER_ASSIGNMENT_EXPIRED,
+                                                  OFFER_ASSIGNMENT_REVOKED,
+                                                  OFFER_REDEEMED)
 from ecommerce.extensions.order.constants import PaymentEventTypeName
 from ecommerce.invoice.models import Invoice
 
@@ -301,7 +303,7 @@ class EdxOrderPlacementMixin(OrderPlacementMixin):
             return None
 
         assignment = offer.offerassignment_set.filter(code=voucher.code, user_email=basket.owner.email).exclude(
-            status__in=[OFFER_REDEEMED, OFFER_ASSIGNMENT_REVOKED]
+            status__in=[OFFER_REDEEMED, OFFER_ASSIGNMENT_EXPIRED, OFFER_ASSIGNMENT_REVOKED]
         ).first()
 
         if assignment:

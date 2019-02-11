@@ -29,6 +29,7 @@ from ecommerce.entitlements.utils import create_or_update_course_entitlement
 from ecommerce.extensions.offer.constants import (
     OFFER_ASSIGNED,
     OFFER_ASSIGNMENT_EMAIL_PENDING,
+    OFFER_ASSIGNMENT_EXPIRED,
     OFFER_ASSIGNMENT_REVOKED,
     OFFER_MAX_USES_DEFAULT,
     OFFER_REDEEMED
@@ -1173,7 +1174,7 @@ class CouponCodeAssignmentSerializer(serializers.Serializer):  # pylint: disable
         voucher_usage_type = vouchers.first().usage
         if voucher_usage_type == Voucher.ONCE_PER_CUSTOMER:
             existing_assignments_for_users = OfferAssignment.objects.filter(user_email__in=emails).exclude(
-                status__in=OFFER_ASSIGNMENT_REVOKED
+                status__in=[OFFER_ASSIGNMENT_EXPIRED, OFFER_ASSIGNMENT_REVOKED]
             )
             existing_applications_for_users = VoucherApplication.objects.filter(user__email__in=emails)
             codes_to_exclude = (

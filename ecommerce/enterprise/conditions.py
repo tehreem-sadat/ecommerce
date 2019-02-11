@@ -11,7 +11,7 @@ from slumber.exceptions import SlumberHttpBaseException
 from ecommerce.enterprise.api import catalog_contains_course_runs, fetch_enterprise_learner_data
 from ecommerce.enterprise.constants import ENTERPRISE_OFFERS_FOR_COUPONS_SWITCH, ENTERPRISE_OFFERS_SWITCH
 from ecommerce.extensions.basket.utils import ENTERPRISE_CATALOG_ATTRIBUTE_TYPE
-from ecommerce.extensions.offer.constants import OFFER_ASSIGNMENT_REVOKED, OFFER_REDEEMED
+from ecommerce.extensions.offer.constants import OFFER_ASSIGNMENT_EXPIRED, OFFER_ASSIGNMENT_REVOKED, OFFER_REDEEMED
 from ecommerce.extensions.offer.decorators import check_condition_applicability
 from ecommerce.extensions.offer.mixins import ConditionWithoutRangeMixin, SingleItemConsumptionConditionMixin
 
@@ -187,7 +187,7 @@ class AssignableEnterpriseCustomerCondition(EnterpriseCustomerCondition):
         user_with_code_assignments = OfferAssignment.objects.filter(
             code=voucher.code, user_email=basket.owner.email
         ).exclude(
-            status__in=[OFFER_REDEEMED, OFFER_ASSIGNMENT_REVOKED]
+            status__in=[OFFER_REDEEMED, OFFER_ASSIGNMENT_EXPIRED, OFFER_ASSIGNMENT_REVOKED]
         )
 
         # user has assignments available

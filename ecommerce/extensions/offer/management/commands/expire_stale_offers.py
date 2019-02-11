@@ -9,7 +9,7 @@ from datetime import datetime
 from dateutil.relativedelta import relativedelta
 from django.core.management import BaseCommand
 from oscar.core.loading import get_model
-from ecommerce.extensions.offer.constants import OFFER_ASSIGNMENT_REVOKED
+from ecommerce.extensions.offer.constants import OFFER_ASSIGNMENT_EXPIRED, OFFER_ASSIGNMENT_REVOKED
 
 OfferAssignment = get_model('offer', 'OfferAssignment')
 logger = logging.getLogger(__name__)
@@ -44,7 +44,7 @@ class Command(BaseCommand):
         )
         for offer_assignment in offer_assignments:
             try:
-                offer_assignment.status = OFFER_ASSIGNMENT_REVOKED
+                offer_assignment.status = OFFER_ASSIGNMENT_EXPIRED
                 offer_assignment.save()
             except Exception as exc:  # pylint: disable=broad-except
                 logger.exception('Encountered exception %s when expiring code %s for user %s',

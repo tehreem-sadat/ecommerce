@@ -26,6 +26,7 @@ from ecommerce.extensions.offer.constants import (
     OFFER_ASSIGNED,
     OFFER_ASSIGNMENT_EMAIL_BOUNCED,
     OFFER_ASSIGNMENT_EMAIL_PENDING,
+    OFFER_ASSIGNMENT_EXPIRED,
     OFFER_ASSIGNMENT_REVOKED,
     OFFER_REDEEMED
 )
@@ -463,6 +464,7 @@ class OfferAssignment(TimeStampedModel):
         (OFFER_ASSIGNED, _("Code successfully assigned to user.")),
         (OFFER_REDEEMED, _("Code has been redeemed by user.")),
         (OFFER_ASSIGNMENT_EMAIL_BOUNCED, _("Email to user bounced.")),
+        (OFFER_ASSIGNMENT_EXPIRED, _("Code has expired.")),
         (OFFER_ASSIGNMENT_REVOKED, _("Code has been revoked for this user.")),
     )
 
