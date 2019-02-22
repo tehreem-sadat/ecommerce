@@ -1,5 +1,6 @@
 from rest_framework import permissions
 
+USERNAME_REPLACEMENT_GROUP = "username_replacement_admin"
 
 class CanActForUser(permissions.IsAdminUser):
     """
@@ -43,3 +44,11 @@ class IsStaffOrModelPermissionsOrAnonReadOnly(permissions.DjangoModelPermissions
     def has_permission(self, request, view):
         user = request.user
         return user.is_staff or super(IsStaffOrModelPermissionsOrAnonReadOnly, self).has_permission(request, view)
+
+class CanReplaceUsername(permissions.BasePermission):
+    """
+    Grants access to the Username Replacement API for anyone in the group,
+    including the service user.
+    """
+    def has_permission(self, request, view):
+        return request.user.groups.filter(name=USERNAME_REPLACEMENT_GROUP).exists()
