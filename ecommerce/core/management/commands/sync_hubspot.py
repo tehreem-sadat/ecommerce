@@ -404,7 +404,9 @@ class Command(BaseCommand):
         """
         unsynced_orders = self._get_unsynced_orders(site_configuration)
         if unsynced_orders:
-            unsynced_order_lines = OrderLine.objects.filter(order__in=unsynced_orders)
+            # we need to exclude the OrderLines without product
+            # because product is required in hubspot for LINE_ITEM.
+            unsynced_order_lines = OrderLine.objects.filter(order__in=unsynced_orders).exclude(product=None)
             unsynced_products = Product.objects.filter(line__in=unsynced_order_lines)
             self._upsert_hubspot_objects(
                 PRODUCT,
